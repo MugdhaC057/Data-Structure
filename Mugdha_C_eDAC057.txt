@@ -1,0 +1,463 @@
+Q1. Solution
+
+package exam;
+
+import java.util.Scanner;
+ 
+class ExpTree
+{
+    class TreeNode
+    {    
+        char data;
+        TreeNode left, right;
+ 
+        public TreeNode(char data)
+        {
+            this.data = data;
+            this.left = null;
+            this.right = null;
+        }
+    } 
+ 
+    class StackNode
+    {
+        TreeNode treeNode;
+        StackNode next;
+ 
+        public StackNode(TreeNode treeNode)
+        {
+            this.treeNode = treeNode;
+            next = null;
+        }
+    }
+ 
+     static StackNode top;
+ 
+    public ExpTree()
+    {
+        top = null;
+    }
+    public void clear()
+    {
+        top = null;
+    }
+ 
+   public void push(TreeNode ptr)
+    {
+        if (top == null)
+            top = new StackNode(ptr);
+        else
+        {
+            StackNode nptr = new StackNode(ptr);
+            nptr.next = top;
+            top = nptr;
+        }
+    }
+ 
+    public TreeNode pop()
+    {
+        if (top == null)
+            throw new RuntimeException("Underflow");
+        else
+        {
+            TreeNode ptr = top.treeNode;
+            top = top.next;
+            return ptr;
+        }
+    }
+    public TreeNode peek()
+    {
+        return top.treeNode;
+    }
+ 
+    public void insert(char val)
+    {
+      
+            if (isDigit(val))
+            {
+                TreeNode p = new TreeNode(val);
+                push(p);
+            }
+            else if (isOperator(val))
+            {
+                TreeNode q = new TreeNode(val);
+                q.left = pop();
+                q.right = pop();
+                push(q);
+            }
+        }
+       
+    public boolean isDigit(char ch)
+    {
+        return ch >= '0' && ch <= '9';
+    }
+
+    public boolean isOperator(char ch)
+    {
+        return ch == '+' || ch == '-' || ch == '*' || ch == '/';
+    }
+ 
+    public int toDigit(char ch)
+    {
+        return ch - '0';
+    }
+ 
+    public void buildTree(String e)
+    {
+        for (int i =0; i<e.length();i++)
+            insert(e.charAt(i));
+    }
+ 
+    public double evaluate()
+    {
+        return evaluate(peek());
+    }
+    
+    public double evaluate(TreeNode p)
+    {
+        if (p.left == null && p.right == null)
+            return toDigit(p.data);
+        else
+        {
+            double result = 0.0;
+            double left = evaluate(p.left);
+            double right = evaluate(p.right);
+            char op = p.data;
+ 
+            switch (op)
+            {
+            case '+' : result = left + right;
+            break;
+            case '-' : result = left - right;
+            break;
+            case '*' : result = left * right; 
+            break;
+            case '/' : result = left / right; 
+            break;
+            default  : result = left + right; 
+            break;
+            }
+            return result;
+        }
+    }
+    public void infix()
+    {
+        inOrder(peek());
+    }
+    private void inOrder(TreeNode q)
+    {
+        if (q != null)
+        {
+            inOrder(q.left);
+            System.out.print(q.data);
+            inOrder(q.right);            
+        }    
+    }    
+}
+public class Tree
+{
+    public static void main(String[] args)
+    {
+        Scanner s = new Scanner(System.in);
+        ExpTree in = new ExpTree();
+        System.out.println("\nEnter Equation");
+        in.buildTree(s.next());
+        System.out.println("\nResult : "+ in.evaluate());
+    }
+}
+*******************************************************************************************************************************************************
+Q2 Solution
+
+
+package exam;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
+public class Findmp3
+{
+	
+		public static void main(String args[])
+		{
+			try (Stream<Path> stream = Files.find(Paths.get("F:javase\\"),5, 
+	                (path, attr) -> String.valueOf(path).endsWith(".mp3"))) 
+	{
+	stream.map(String::valueOf).forEach(System.out::println);
+	}
+			catch(Exception ee)
+			{
+				ee.printStackTrace();
+			}
+		}
+}
+*******************************************************************************************************************************************************
+Q4 Solution
+
+package exam;
+
+import java.util.Scanner;
+
+class StackS
+{
+	private int S[],MaxSize,tos;
+	StackS(int Size)
+{
+	MaxSize=Size;
+	S=new int[MaxSize];
+	tos=-1;
+}
+public void push(int e)
+{
+	tos++;
+	S[tos]=e;
+}
+public boolean isFull()
+{
+	if(tos==MaxSize-1)
+	return(true);
+	else
+	return(false);
+}
+public int pop()
+{
+	int temp;
+	temp=S[tos];
+	tos--;
+	return(temp);
+}
+public boolean isEmpty()
+{
+	if(tos==-1)
+	return(true);
+	else
+	return(false);
+}
+
+public void inc(int a,int n)
+{
+	
+	for(tos=0;tos<n;tos++)
+	{
+		S[tos]=S[tos]+a;
+	}
+	
+}
+
+public void printStack()
+{
+for(int i=tos;i>-1;i--)
+{
+	 System.out.println(S[i]);
+}
+}
+public int atpeak()
+{
+	return(S[tos]);
+}
+}
+public class Queue {
+
+public static void main(String args[])
+{
+	StackS obj=null;
+	int ch,e,a,b,n;
+	Scanner in=new Scanner(System.in);
+	System.out.print("Size :");
+	n=in.nextInt();
+	obj=new StackS(n);
+do
+{
+	System.out.print("\n1.Push \n2.Pop \n3.At peak \n4.INC \n5.print \n0.Exit\n");
+	ch=in.nextInt();
+switch(ch)
+{
+	case 1:
+	if(obj.isFull()!=true)
+{
+	System.out.println("Enter Elecment :");
+	e=in.nextInt();
+	obj.push(e);
+}
+else
+{
+	System.out.println("Stack Full");
+}
+break;
+case 2 :
+	if(obj.isEmpty()!=true)
+{
+	System.out.println("Element poped :"+obj.pop());
+
+}
+else
+{
+	System.out.println("Stack Empty");
+}
+break;
+case 3:
+	System.out.println("Element poped :"+obj.atpeak());
+break;
+
+case 4:
+	System.out.println("Enter Addition No");
+	a=in.nextInt();
+	System.out.println("Enter Index No");
+	b=in.nextInt();
+	obj.inc(a,b);
+	
+	
+case 5:
+	if(obj.isEmpty()!=true)
+{
+	obj.printStack();
+}
+else {
+	System.out.println("Stack Empty");}
+break;
+case 0:
+System.out.println("\n Exiting");
+break;
+
+default:
+	System.out.println("wrong option");
+break;
+}
+}while(ch!=0);
+}
+}
+*******************************************************************************************************************************************************
+Q5 Solution
+
+package exam;
+import java.util.Scanner;
+
+class Stack
+{
+	private int S[],MaxSize,tos;
+Stack(int Size)
+{
+	MaxSize=Size;
+	S=new int[MaxSize];
+	tos=-1;
+}
+public void push(int e)
+{
+	tos++;
+	S[tos]=e;
+}
+public boolean isFull()
+{
+	if(tos==MaxSize-1)
+		return(true);
+else
+return(false);
+}
+public int pop()
+{
+	int temp;
+	temp=S[tos];
+	tos--;
+return(temp);
+}
+public boolean isEmpty()
+{
+	if(tos==-1)
+return(true);
+else
+return(false);
+}
+
+public void inc(int a,int n)
+{
+	
+	for(tos=0;tos<n;tos++)
+	{
+		S[tos]=S[tos]+a;
+	}
+	
+}
+
+public void printStack()
+{
+for(int i=tos;i>-1;i--)
+{
+ System.out.println(S[i]);
+}
+}
+public int atpeak()
+{
+return(S[tos]);
+}
+}
+public class Increment {
+
+public static void main(String args[])
+{
+Stack s=null;
+int ch,e,a,b,n;
+Scanner in=new Scanner(System.in);
+System.out.print("Size :");
+n=in.nextInt();
+s=new Stack(n);
+do
+{
+System.out.print("\n1.Push \n2.Pop \n3.At peak \n4.INC \n5.print \n0.Exit\n");
+ch=in.nextInt();
+switch(ch)
+{
+case 1:
+if(s.isFull()!=true)
+{
+System.out.println("Enter Elecment :");
+e=in.nextInt();
+s.push(e);
+}
+else
+{
+System.out.println("Stack Full");
+}
+break;
+case 2 :
+if(s.isEmpty()!=true)
+{
+System.out.println("Element poped :"+s.pop());
+
+}
+else
+{
+System.out.println("Stack Empty");
+}
+break;
+case 3:
+System.out.println("Element poped :"+s.atpeak());
+break;
+
+case 4:
+	System.out.println("Enter Addition No");
+	a=in.nextInt();
+	System.out.println("Enter Index No");
+	b=in.nextInt();
+	s.inc(a,b);
+	
+	
+case 5:
+	if(s.isEmpty()!=true)
+{
+		s.printStack();
+}
+else {
+System.out.println("Stack Empty");}
+break;
+case 0:
+System.out.println("\n Exiting");
+break;
+
+default:
+System.out.println("wrong option");
+break;
+}
+}while(ch!=0);
+}
+}
